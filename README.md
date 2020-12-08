@@ -24,3 +24,11 @@ var params = {
      
 };
 
+### 调用方式：(暂不支持回调函数中再次调用myAlert)
+
+myAlert(params,function(){
+
+     ....//your js code
+     
+})
+
