@@ -5,31 +5,32 @@
 ##### 目前支持title、text、input、textarea、select和定时关闭
 ```javascript
 var params = {
-
+     paramsID：''//必填
      title: '',//必填
-     
      body:{
-     
          text:'',
-         
          input:[{type:'',placeholder:'',id:''},...]/null,
-         
          textarea:[{placeholder:'',id:''},...]/null,
-         
          select:[{text:[0,1,2...],value:[0,1,2...],id:''},...]/null
-         
      },
-     
      timer: 0,1,2.../null
-     
 };
 ```
-
-### 调用方式：(暂不支持回调函数中再次调用myAlert)
+### myAlert.js 调用方式：(暂不支持回调函数中再次调用myAlert)
 ```javascript
-myAlert(params,function(){
-
+myAlert(params,function(event){//event的返回值为：{youInputID:value...}
      ....//your js code
-     
 })
 ```
+### myAlert2.js 调用方式：(支持回调函数中再次调用)
+```javascript
+var myAlert = new MyAlert(params);
+//小模态框
+myAlert.tips(function(event){//event的返回值为：{youInputID:value...}
+     ....//your js code
+})
+//中等模态框
+myAlert.modal(function(event){//event的返回值为：{youInputID:value...}
+     ....//your js code
+})
+
