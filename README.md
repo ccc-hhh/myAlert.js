@@ -5,7 +5,7 @@
 ##### 目前支持title、text、input、textarea、select和定时关闭
 ```javascript
 var params = {
-     paramsID：''//必填
+     paramsID: '',//仅在myAlert2.js中支持,必填
      title: '',//必填
      body:{
          text:'',
