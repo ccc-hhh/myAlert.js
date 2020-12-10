@@ -211,5 +211,3 @@
         }
     }
 })(window, document);
-
-//myAlert(function (id) {});//回调
