@@ -4,13 +4,13 @@
  * 基于bootstrap4模态框样式,使用回调函数模拟alert
  */
 // var params = {
-//     paramsID:''//必填，例:var newAlert= new MyAlert({'paramsID':'newAlert'})
-//     title: '',//必填
+//     paramsID:'id'//必填，例:var newAlert= new MyAlert({'paramsID':'newAlert'...})
+//     title: 'title',//必填
 //     body:{
 //         text:'',
-//         input:[{type:'',placeholder:'',id:''},...]/null,
-//         textarea:[{placeholder:'',id:''},...]/null,
-//         select:[{text:[0,1,2...],value:[0,1,2...],id:''},...]/null
+//         input:[{type:'',placeholder:'',label:'',id:''},...]/null,
+//         textarea:[{placeholder:'',label:'',id:''},...]/null,
+//         select:[{text:[0,1,2...],value:[0,1,2...],label:'',id:''},...]/null
 //     },
 //     timer: 0,1,2.../null
 // };
@@ -54,7 +54,7 @@
             //设置text
             if (this.params.body.hasOwnProperty('text') && this.params.body.text != null && this.params.body.text != '') {
                 document.getElementById(this.id + '-myAlertBody').innerHTML = this.params.body.text;
-            }else{
+            } else {
                 document.getElementById(this.id + '-myAlertBody').innerHTML = '    ';
             }
 
@@ -98,31 +98,6 @@
                     }
                 });
             }
-
-            //定时器
-            if (this.params.hasOwnProperty('timer') && this.params.timer != null && this.params.timer > 0) {
-                timerTipsHTML = document.createElement('text');
-                timerTipsHTML.id = this.id + '-TimerTips';
-                timerTipsHTML.setAttribute('style', 'margin-right:265px;font-size:15px;color:#808080;');
-                timerTipsHTML.innerHTML = this.params.timer + '秒后消失'
-                document.getElementById(this.id + '-myAlertFooter').prepend(timerTipsHTML);
-                const TIME_COUNT = this.params.timer;
-                var timer = 0;
-                if (!timer) {
-                    count = TIME_COUNT;
-                    timer = setInterval(() => {
-                        if (count > 0 && count <= TIME_COUNT) {
-                            count -= 1;
-                        } else {
-                            document.getElementById(this.id + '-myAlertClose').click();
-                            clearInterval(timer);
-                            timer = null;
-                            MyAlert.clear(this.params);
-                            this.callback(true); //回调
-                        }
-                    }, 1000);
-                }
-            }
         },
         clear: function (theId) {
             var bodyList = document.getElementById(theId + '-myAlertBody');
@@ -138,9 +113,37 @@
         open: function () {
             $('#modalAlert').modal();
         },
+        timer: function (callback) {
+            //定时器
+            if (this.params.hasOwnProperty('timer') && this.params.timer != null && this.params.timer > 0) {
+                timerTipsHTML = document.createElement('text');
+                timerTipsHTML.id = this.id + '-TimerTips';
+                timerTipsHTML.setAttribute('style', 'margin-right:68px;font-size:15px;color:#808080;');
+                timerTipsHTML.innerHTML = this.params.timer + '秒后消失'
+                document.getElementById(this.id + '-myAlertFooter').prepend(timerTipsHTML);
+                const TIME_COUNT = this.params.timer;
+                var timer = 0;
+                if (!timer) {
+                    count = TIME_COUNT;
+                    timer = setInterval(() => {
+                        if (count > 0 && count <= TIME_COUNT) {
+                            count -= 1;
+                        } else {
+                            document.getElementById(this.id + '-myAlertClose').click();
+                            clearInterval(timer);
+                            timer = null;
+                            this.clear(this.id);
+                            callback(true);
+                        }
+                    }, 1000);
+                }
+            }
+        },
+        //小
         tips: function (callback) {
             this.init(' modal-sm');
             this.set();
+            this.timer(callback);
             this.open();
             var theParams = this.params;
             var theId = this.id;
@@ -174,6 +177,7 @@
                 }
             }
         },
+        //中
         modal: function (callback) {
             this.init('');
             this.set();
