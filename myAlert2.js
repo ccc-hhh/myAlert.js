@@ -54,6 +54,8 @@
             //设置text
             if (this.params.body.hasOwnProperty('text') && this.params.body.text != null && this.params.body.text != '') {
                 document.getElementById(this.id + '-myAlertBody').innerHTML = this.params.body.text;
+            }else{
+                document.getElementById(this.id + '-myAlertBody').innerHTML = '    ';
             }
 
             //设置input
