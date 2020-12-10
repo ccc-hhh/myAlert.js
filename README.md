@@ -22,7 +22,7 @@ myAlert(params,function(event){//event的返回值为：{youInputID:value...}
      ....//your js code
 })
 ```
-### myAlert2.js 调用方式：(支持回调函数中新建new MyAlert(params)，并调用)
+### myAlert2.js 调用方式：(支持回调函数中新建new MyAlert(params)并调用，同一个MyAert对象不能在其回调函数中再次使用)
 ```javascript
 var myAlert = new MyAlert(params);
 //小模态框
