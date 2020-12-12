@@ -54,14 +54,14 @@
             //设置text
             if (this.params.body.hasOwnProperty('text') && this.params.body.text != null && this.params.body.text != '') {
                 document.getElementById(this.id + '-myAlertBody').innerHTML = this.params.body.text;
-            } else {
-                document.getElementById(this.id + '-myAlertBody').innerHTML = '    ';
+            }else{
+                document.getElementById(this.id + '-myAlertBody').innerHTML = '              ';
             }
 
             //设置input
             if (this.params.body.hasOwnProperty('input') && this.params.body.input != null && this.params.body.input.length > 0) {
                 this.params.body.input.forEach(item => {
-                    inputHTML = document.createElement('input');
+                    var inputHTML = document.createElement('input');
                     inputHTML.id = item.id;
                     inputHTML.setAttribute('class', 'form-control');
                     inputHTML.setAttribute('type', item.type);
@@ -73,7 +73,7 @@
             //设置textarea
             if (this.params.body.hasOwnProperty('textarea') && this.params.body.textarea != null && this.params.body.textarea.length > 0) {
                 this.params.body.textarea.forEach(item => {
-                    textareaHTML = document.createElement('textarea');
+                    var textareaHTML = document.createElement('textarea');
                     textareaHTML.id = item.id;
                     textareaHTML.setAttribute('class', 'form-control');
                     textareaHTML.setAttribute('type', item.type);
@@ -86,7 +86,7 @@
             //设置select
             if (this.params.body.hasOwnProperty('select') && this.params.body.select != null && this.params.body.select.length > 0) {
                 this.params.body.select.forEach(item => {
-                    selectHTML = document.createElement('select');
+                    var selectHTML = document.createElement('select');
                     selectHTML.id = item.id;
                     selectHTML.setAttribute('class', 'form-control');
                     document.getElementById(this.id + '-myAlertBody').append(selectHTML);
@@ -116,7 +116,7 @@
         timer: function (callback) {
             //定时器
             if (this.params.hasOwnProperty('timer') && this.params.timer != null && this.params.timer > 0) {
-                timerTipsHTML = document.createElement('text');
+                var timerTipsHTML = document.createElement('text');
                 timerTipsHTML.id = this.id + '-TimerTips';
                 timerTipsHTML.setAttribute('style', 'margin-right:68px;font-size:15px;color:#808080;');
                 timerTipsHTML.innerHTML = this.params.timer + '秒后消失'
@@ -124,15 +124,15 @@
                 const TIME_COUNT = this.params.timer;
                 var timer = 0;
                 if (!timer) {
-                    count = TIME_COUNT;
+                    var count = TIME_COUNT;
                     timer = setInterval(() => {
                         if (count > 0 && count <= TIME_COUNT) {
                             count -= 1;
                         } else {
-                            document.getElementById(this.id + '-myAlertClose').click();
+                            this.clear(this.id);
                             clearInterval(timer);
                             timer = null;
-                            this.clear(this.id);
+                            document.getElementById(this.id + '-myAlertClose').click();
                             callback(true);
                         }
                     }, 1000);
@@ -147,33 +147,35 @@
             this.open();
             var theParams = this.params;
             var theId = this.id;
-            //button的点击事件
-            document.onclick = function (e) {
-                var target = e.target;
-                //console.log(target.id)
-                if (target.id == theId + '-myAlertSubmit') {
-                    var eventJson = {};
-                    if (theParams.body.hasOwnProperty('input') && theParams.body.input != null && theParams.body.input.length > 0) {
-                        theParams.body.input.forEach(item => {
-                            eventJson[item.id] = $("#" + item.id).val();
-                        })
+            if (!this.params.hasOwnProperty('timer')){
+                //button的点击事件
+                document.onclick = function (e) {
+                    var target = e.target;
+                    //console.log(target.id)
+                    if (target.id == theId + '-myAlertSubmit') {
+                        var eventJson = {};
+                        if (theParams.body.hasOwnProperty('input') && theParams.body.input != null && theParams.body.input.length > 0) {
+                            theParams.body.input.forEach(item => {
+                                eventJson[item.id] = $("#" + item.id).val();
+                            })
+                        }
+                        if (theParams.body.hasOwnProperty('textarea') && theParams.body.textarea != null && theParams.body.textarea.length > 0) {
+                            theParams.body.textarea.forEach(item => {
+                                eventJson[item.id] = $("#" + item.id).val();
+                            })
+                        }
+                        if (theParams.body.hasOwnProperty('select') && theParams.body.select != null && theParams.body.select.length > 0) {
+                            theParams.body.select.forEach(item => {
+                                eventJson[item.id] = $("#" + item.id).val();
+                            })
+                        }
+                        this.clear(theId);
+                        document.getElementById(theId + '-myAlertClose').click();
+                        callback(eventJson); //回调
                     }
-                    if (theParams.body.hasOwnProperty('textarea') && theParams.body.textarea != null && theParams.body.textarea.length > 0) {
-                        theParams.body.textarea.forEach(item => {
-                            eventJson[item.id] = $("#" + item.id).val();
-                        })
+                    if (target.id == theId + '-myAlertClose' || target.id == theId + '-myAlertCloseX') {
+                        this.clear(theId);
                     }
-                    if (theParams.body.hasOwnProperty('select') && theParams.body.select != null && theParams.body.select.length > 0) {
-                        theParams.body.select.forEach(item => {
-                            eventJson[item.id] = $("#" + item.id).val();
-                        })
-                    }
-                    document.getElementById(theId + '-myAlertClose').click();
-                    this.clear(theId);
-                    callback(eventJson); //回调
-                }
-                if (target.id == theId + '-myAlertClose' || target.id == theId + '-myAlertCloseX') {
-                    this.clear(theId);
                 }
             }
         },
